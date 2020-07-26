@@ -36,6 +36,12 @@ type ForecastMeta struct {
 	Units     ForecastUnits `jsong:"units"`
 }
 
+type WeatherSymbol string
+
+type ForecastSummary struct {
+	SymbolCode WeatherSymbol `json:"symbol_code"`
+}
+
 type ForecastTimePeriod struct {
 	PrecipitationAmountMin    float64 `json:"precipitation_amount_min"`
 	ProbThunder               float64 `json:"probability_of_thunder"`
@@ -48,6 +54,7 @@ type ForecastTimePeriod struct {
 }
 type ForecastTimeStepPeriod struct {
 	Details ForecastTimePeriod `json:"period"`
+	Summary ForecastSummary    `json:summary`
 }
 
 type ForecastTimeInstant struct {
