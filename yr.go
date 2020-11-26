@@ -2,7 +2,10 @@ package yr
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
+	"io/ioutil"
+	"log"
 	"net/http"
 	"net/url"
 	"time"
@@ -109,12 +112,40 @@ const (
 )
 
 func Compact(lat, lon float64) (*METJSONForecast, error) {
+	// setup request
+
 	v := url.Values{}
 	v.Add("lat", fmt.Sprintf("%.2f", lat))
 	v.Add("lon", fmt.Sprintf("%.2f", lon))
 
-	resp, e := http.Get(fmt.Sprintf("%s%s?%s", URI, EndpointCompact, v.Encode()))
+	url := fmt.Sprintf("%s%s?%s", URI, EndpointCompact, v.Encode())
+
+	// they give me forbidden if user agent is not set
+	req, e := http.NewRequest(http.MethodGet, url, nil)
+	req.Header.Add("user-agent", "S0m3-yR-C1i3n7") // lol
+
+	// make request
+
+	resp, e := http.DefaultClient.Do(req)
+	if e != nil {
+		return nil, e
+	}
+
+	// make sure status code is 200
+
+	if resp.StatusCode != http.StatusOK {
+		if msg, e := ioutil.ReadAll(resp.Body); e != nil {
+			return nil, e
+		} else {
+			log.Print(string(msg))
+		}
+		return nil, errors.New(http.StatusText(resp.StatusCode))
+	}
+
+	// decode JSON
+
 	var f METJSONForecast
+
 	if e != nil {
 		return nil, e
 	} else if e := json.NewDecoder(resp.Body).Decode(&f); e != nil {
