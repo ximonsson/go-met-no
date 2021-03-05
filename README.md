@@ -16,6 +16,9 @@ f, e := weather.LocationForecastCompact(...)
 ```
 
 
+WIP for the [radar API](https://api.met.no/weatherapi/radar/2.0/documentation).
+
+
 ## Satellite
 
 WIP on the [geosattelite API](https://api.met.no/weatherapi/geosatellite/1.4/documentation).
