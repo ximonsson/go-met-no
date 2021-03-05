@@ -1,4 +1,4 @@
-package yr
+package weather
 
 import (
 	"encoding/json"
@@ -107,18 +107,18 @@ type METJSONForecast struct {
 }
 
 const (
-	URI             string = "https://api.met.no/weatherapi/locationforecast/2.0"
-	EndpointCompact string = "/compact"
+	LocationForecastURI string = "https://api.met.no/weatherapi/locationforecast/2.0"
+	EndpointCompact     string = "/compact"
 )
 
-func Compact(lat, lon float64) (*METJSONForecast, error) {
+func LocationForecastCompact(lat, lon float64) (*METJSONForecast, error) {
 	// setup request
 
 	v := url.Values{}
 	v.Add("lat", fmt.Sprintf("%.2f", lat))
 	v.Add("lon", fmt.Sprintf("%.2f", lon))
 
-	url := fmt.Sprintf("%s%s?%s", URI, EndpointCompact, v.Encode())
+	url := fmt.Sprintf("%s%s?%s", LocationForecastURI, EndpointCompact, v.Encode())
 
 	// they give me forbidden if user agent is not set
 	req, e := http.NewRequest(http.MethodGet, url, nil)

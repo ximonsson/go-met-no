@@ -3,9 +3,9 @@ package main
 import (
 	"fmt"
 	"log"
+	"met/weather"
 	"os"
 	"strconv"
-	"yr"
 )
 
 func main() {
@@ -23,7 +23,7 @@ func main() {
 		log.Fatal("lon needs to be a valid float")
 	}
 
-	f, e := yr.Compact(lat, lon)
+	f, e := weather.LocationForecastCompact(lat, lon)
 	if e != nil {
 		log.Fatal(e)
 	}
